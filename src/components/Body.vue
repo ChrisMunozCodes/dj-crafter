@@ -9,17 +9,17 @@ const currentSong = ref(0)
 
 const music = {
   1: {
-    title: 'song1',
+    title: 'Rising Sun ',
     file: song1
   },
   2: {
-    title: 'song2',
+    title: 'Happy ',
     file: song2
   },
   3: {
-    title: 'song3',
+    title: 'Deep Dive ',
     file: song3
-  }
+  },
 }
 
 let playlist = [music[1], music[2], music[3]]
@@ -77,22 +77,25 @@ watch(currentSong, (newSong) => {
 
 
 <template>
+<div class="min-h-screen bg-green-400 flex justify-center items-center box-border flex-col">
+    <section class="prose">
+        <h2>{{ isPlaying ? 'Now Playing ' + playlist[currentSong].title : playlist[currentSong].title + ' is Paused' }}</h2>
+    </section>
     <section>
-      <audio ref="audioRef" controls>
+      <audio ref="audioRef">
         <source :src="playlist[currentSong].file" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
-      <ul>
-        <li><button @click="previousSong"> &lt; </button></li>
-        <li><button @click="pausePlay">{{ isPlaying ? 'Pause' : 'Play' }}</button></li>
-        <li><button @click="nextSong"> &gt; </button></li>
+      <ul class="flex m-2">
+        <li><button class="btn btn-active btn-neutral prose m-2" @click="previousSong"> &lt; </button></li>
+        <li><button class="btn btn-active btn-accent prose m-2" @click="pausePlay">{{ isPlaying ? 'Pause' : 'Play' }}</button></li>
+        <li><button class="btn btn-active btn-neutral prose m-2" @click="nextSong"> &gt; </button></li>
       </ul>
     </section>
+</div>
   </template>
+
   
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
 </style>
