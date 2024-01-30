@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue'
+import { ref, Ref, watch, onMounted } from 'vue'
 import song1 from "../assets/music/song1.mp3"
 import song2 from "../assets/music/song2.mp3"
 import song3 from "../assets/music/song3.mp3"
@@ -71,6 +71,18 @@ watch(currentSong, (newSong) => {
     }
   }
 })
+
+onMounted(() => {
+  const player = audioRef.value;
+  if (player) {
+    player.addEventListener('timeupdate', function() {
+      const seekBar = document.getElementById('seekbar') as HTMLProgressElement;
+      if (seekBar) {
+        seekBar.value = player.currentTime / player.duration * 100;
+      }
+    });
+  }
+});
 </script>
 
 
@@ -82,7 +94,7 @@ watch(currentSong, (newSong) => {
         <h2>{{ isPlaying ? 'Now Playing ' + playlist[currentSong].title : playlist[currentSong].title + ' is Paused' }}</h2>
     </section>
     <section>
-      <audio ref="audioRef">
+      <audio id="player" ref="audioRef">
         <source :src="playlist[currentSong].file" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
@@ -91,6 +103,9 @@ watch(currentSong, (newSong) => {
         <li><button class="btn btn-active btn-accent prose m-2" @click="pausePlay">{{ isPlaying ? 'Pause' : 'Play' }}</button></li>
         <li><button class="btn btn-active btn-neutral prose m-2" @click="nextSong"> &gt; </button></li>
       </ul>
+    </section>
+    <section>
+        <progress id="seekbar" class="progress progress-green-400 w-56" value="0" max="100"></progress>
     </section>
 </div>
   </template>
